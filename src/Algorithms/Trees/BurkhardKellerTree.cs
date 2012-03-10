@@ -27,7 +27,7 @@ namespace Algorithms.Trees
 
         public void AddItem(T item)
         {
-            if (Equals(item, default(T)))
+            if (EqualityComparer<T>.Default.Equals(item, default(T)))
             {
                 throw new ArgumentNullException("item", "Item must have a value.");
             }
