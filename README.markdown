@@ -1,4 +1,4 @@
-A Burkard-Keller Tree implementation in C#
+A Burkhard-Keller Tree implementation in C#
 ==========================================
 
 This project was inspried by the article 
