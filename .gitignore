@@ -19,3 +19,4 @@ reports
 reports/*
 *.sln.docstates
 *.sln.docstates
+*.dotCover
