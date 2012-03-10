@@ -12,8 +12,7 @@ namespace Algorithms.Trees
         ///   Initializes a new instance of the <see cref="BurkhardKellerTree{T}" /> class.
         /// </summary>
         /// <param name="distanceCalculator"> The alogrithm to calculate the distance between two strings. </param>
-        public BurkhardKellerTree(
-            Func<T, T, double> distanceCalculator)
+        public BurkhardKellerTree(Func<T, T, double> distanceCalculator)
         {
             if (distanceCalculator == null)
             {
