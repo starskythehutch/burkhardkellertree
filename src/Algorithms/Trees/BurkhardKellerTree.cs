@@ -59,10 +59,10 @@ namespace Algorithms.Trees
                 throw new ArgumentOutOfRangeException("distance", "Distance should be a positive number.");
             }
 
-            return FindMatchingNodes(RootNode, value, distance);
+            return FindMatchingItems(RootNode, value, distance);
         }
 
-        private IEnumerable<T> FindMatchingNodes(Node<T> node, T value, double distance)
+        private IEnumerable<T> FindMatchingItems(Node<T> node, T value, double distance)
         {
             double differenceWithNode = distanceCalculator(node.Data, value);
 
@@ -76,9 +76,9 @@ namespace Algorithms.Trees
 
             foreach (Edge<T> edge in node.Edges.Where(e => e.Value >= minimum && e.Value <= maximum))
             {
-                foreach (T matchingNode in FindMatchingNodes(edge.EndNode, value, distance))
+                foreach (T item in FindMatchingItems(edge.EndNode, value, distance))
                 {
-                    yield return matchingNode;
+                    yield return item;
                 }
             }
         }
