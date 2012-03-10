@@ -85,11 +85,11 @@ namespace Algorithms.Trees
 
         private void InsertNode(Node<T> node, T item)
         {
-            double difference = distanceCalculator(node.Data, item);
+            double distance = distanceCalculator(node.Data, item);
 
-            if (difference > 0)
+            if (distance > 0)
             {
-                Edge<T> edge = node.Edges.SingleOrDefault(e => difference.Equals(e.Value));
+                Edge<T> edge = node.Edges.SingleOrDefault(e => distance.Equals(e.Value));
 
                 if (edge != null)
                 {
@@ -98,7 +98,7 @@ namespace Algorithms.Trees
                 else
                 {
                     var newEdge = new Edge<T>
-                                      {EndNode = new Node<T> {Data = item}, StartNode = node, Value = difference};
+                                      {EndNode = new Node<T> {Data = item}, StartNode = node, Value = distance};
 
                     node.AddEdge(newEdge);
                 }
