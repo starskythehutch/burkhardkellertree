@@ -11,7 +11,7 @@ namespace Algorithms.Trees
         /// <summary>
         ///   Initializes a new instance of the <see cref="BurkhardKellerTree{T}" /> class.
         /// </summary>
-        /// <param name="distanceCalculator"> The alogrithm to calculate the distance between two strings. </param>
+        /// <param name="distanceCalculator"> The alogrithm to calculate the distance between two objects. </param>
         public BurkhardKellerTree(Func<T, T, double> distanceCalculator)
         {
             if (distanceCalculator == null)
@@ -45,7 +45,7 @@ namespace Algorithms.Trees
         ///   Finds all items in the tree within a specified distance.
         /// </summary>
         /// <param name="value"> The search term to match against. </param>
-        /// <param name="distance"> The distance to a node that indicates a match. The range of values for difference varies depending on the string difference or similarity alogrithm. This value should always be positive. </param>
+        /// <param name="distance"> The distance to a node that indicates a match. The range of values for difference varies depending on the difference alogrithm. This value should always be positive. </param>
         /// <returns> The matching items in the tree. </returns>
         public IEnumerable<T> FindItemsWithinDistanceOf(T value, double distance)
         {
