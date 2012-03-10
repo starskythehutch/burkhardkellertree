@@ -97,8 +97,7 @@ namespace Algorithms.Trees
                 }
                 else
                 {
-                    var newEdge = new Edge<T>
-                                      {EndNode = new Node<T> {Data = item}, StartNode = node, Value = distance};
+                    var newEdge = new Edge<T> {EndNode = new Node<T> {Data = item}, StartNode = node, Value = distance};
 
                     node.AddEdge(newEdge);
                 }
