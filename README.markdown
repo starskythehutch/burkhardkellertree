@@ -2,7 +2,7 @@ A Burkhard-Keller Tree implementation in C#
 ==========================================
 
 This project was inspried by the article 
-on Nick's Blog tiltles "Damn Cool
+on Nick's Blog tiltled "Damn Cool
 Algorithms". Check it out for more 
 information about BK Trees. They are very
 usefull!
