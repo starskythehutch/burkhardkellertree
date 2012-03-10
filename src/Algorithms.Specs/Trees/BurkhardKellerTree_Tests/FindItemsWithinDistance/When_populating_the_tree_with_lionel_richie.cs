@@ -35,7 +35,7 @@
         private Because of = () =>
                                  {
                                      items =
-                                         tree.FindItemsWithinDistanceOf(searchTerm, SearchPrecision.ExactPrecision).ToList
+                                         tree.FindItemsWithinDistanceOf(searchTerm, SearchPrecision.Exact).ToList
                                              ();
                                  };
 
