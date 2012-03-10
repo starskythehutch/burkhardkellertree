@@ -50,7 +50,7 @@ namespace Algorithms.Trees
         /// <returns> The matching items in the tree. </returns>
         public IEnumerable<T> FindItemsWithinDistanceOf(T value, double distance)
         {
-            if(EqualityComparer<T>.Default.Equals(value,default(T)))
+            if (EqualityComparer<T>.Default.Equals(value, default(T)))
             {
                 throw new ArgumentException("Value must have a value", "value");
             }
