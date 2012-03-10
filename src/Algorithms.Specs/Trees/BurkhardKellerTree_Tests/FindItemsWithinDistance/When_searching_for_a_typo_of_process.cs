@@ -37,7 +37,7 @@ namespace Algorithms.Specs.Trees.BurkhardKellerTree_Tests.FindItemsWithinDistanc
                                         };
 
         private Because of =
-            () => { items = tree.FindItemsWithinDistanceOf(searchTerm, SearchPrecision.High).ToList(); };
+            () => { items = tree.FindItemsWithinDistanceOf(searchTerm, Similarity.High).ToList(); };
 
         private It should_return_process = () => { items.ShouldContainOnly(new[] {"Process"}); };
     }

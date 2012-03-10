@@ -15,7 +15,7 @@ namespace Algorithms.Specs.Trees.BurkhardKellerTree_Tests.FindItemsWithinDistanc
         private static BurkhardKellerTree<string> tree;
 
         private Establish context =
-            () => { tree = new BurkhardKellerTree<string>(DamerauLevenshtein.Distance); };
+            () => { tree = new BurkhardKellerTree<string>(DamerauLevenshtein.Similarity); };
 
         private Because of =
             () => { Exception = Catch.Exception(() => { tree.FindItemsWithinDistanceOf("Lorem", -0.01f); }); };

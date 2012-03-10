@@ -54,7 +54,7 @@
     <Compile Include="Trees\BurkhardKellerTree_Tests\FindItemsWithinDistance\When_populating_the_tree_with_lionel_richie.cs" />
     <Compile Include="Trees\BurkhardKellerTree_Tests\FindItemsWithinDistance\When_searching_for_an_items_with_a_negative_distance.cs" />
     <Compile Include="Trees\BurkhardKellerTree_Tests\FindItemsWithinDistance\When_searching_for_a_typo_of_process.cs" />
-    <Compile Include="Trees\BurkhardKellerTree_Tests\SearchPrecision.cs" />
+    <Compile Include="Trees\BurkhardKellerTree_Tests\Similarity.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Algorithms\Algorithms.csproj">

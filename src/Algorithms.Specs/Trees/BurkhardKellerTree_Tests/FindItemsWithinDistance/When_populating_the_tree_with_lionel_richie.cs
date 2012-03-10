@@ -21,7 +21,7 @@
                                         {
                                             searchTerm = "me";
                                             tree = new BurkhardKellerTree<string>(
-                                                DamerauLevenshtein.Distance);
+                                                DamerauLevenshtein.Similarity);
 
                                             tree.AddItem("Hello?");
                                             tree.AddItem("Is");
@@ -35,7 +35,7 @@
         private Because of = () =>
                                  {
                                      items =
-                                         tree.FindItemsWithinDistanceOf(searchTerm, SearchPrecision.Exact).ToList
+                                         tree.FindItemsWithinDistanceOf(searchTerm, Similarity.Exact).ToList
                                              ();
                                  };
 
