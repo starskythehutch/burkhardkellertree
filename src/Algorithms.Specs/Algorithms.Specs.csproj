@@ -31,7 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Machine.Specifications">
+    <Reference Include="Machine.Specifications, Version=0.5.25.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Machine.Specifications.dll</HintPath>
     </Reference>
     <Reference Include="System" />
