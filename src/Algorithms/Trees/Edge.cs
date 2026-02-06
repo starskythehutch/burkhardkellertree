@@ -2,10 +2,14 @@ namespace Algorithms.Trees
 {
     internal sealed class Edge<T>
     {
-        public Node<T> EndNode { get; set; }
+        public Edge(Node<T> endNode, double value)
+        {
+            EndNode = endNode;
+            Value = value;
+        }
 
-        public Node<T> StartNode { get; set; }
+        public Node<T> EndNode { get; private set; }
 
-        public double Value { get; set; }
+        public double Value { get; private set; }
     }
 }

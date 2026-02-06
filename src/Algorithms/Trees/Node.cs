@@ -6,7 +6,12 @@
     {
         private readonly List<Edge<T>> edges = new List<Edge<T>>();
 
-        public T Data { get; set; }
+        public Node(T data)
+        {
+            Data = data;
+        }
+
+        public T Data { get; private set; }
 
         public IEnumerable<Edge<T>> Edges
         {
