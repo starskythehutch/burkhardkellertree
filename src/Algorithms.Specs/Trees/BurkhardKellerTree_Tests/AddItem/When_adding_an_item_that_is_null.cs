@@ -19,6 +19,6 @@
 
         private Because of = () => { Exception = Catch.Exception(() => { tree.AddItem(null); }); };
 
-        private It should_fail_with_an_ArgumentNullException = () => Exception.ShouldBeOfType<ArgumentNullException>();
+        private It should_fail_with_an_ArgumentNullException = () => Exception.ShouldBeOfExactType<ArgumentNullException>();
     }
 }

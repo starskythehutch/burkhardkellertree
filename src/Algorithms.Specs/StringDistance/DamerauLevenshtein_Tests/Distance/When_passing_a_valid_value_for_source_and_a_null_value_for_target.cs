@@ -12,7 +12,7 @@ namespace Algorithms.Specs.StringDistance.DamerauLevenshtein_Tests.Distance
 
         private Establish context = () => { };
 
-        private Because of = () => { distance = source.Distance(null); };
+        private Because of = () => { distance = DamerauLevenshtein.Distance(source, null); };
 
         private It should_return_the_length_of_source = () => { distance.ShouldEqual(source.Length); };
     }

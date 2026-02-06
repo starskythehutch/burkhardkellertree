@@ -19,6 +19,6 @@
 
         private Because of = () => { Exception = Catch.Exception(() => { tree.FindItemsWithinDistanceOf(null, 0); }); };
 
-        private It should_fail_with_an_ArgumentException = () => Exception.ShouldBeOfType<ArgumentException>();
+        private It should_fail_with_an_ArgumentException = () => Exception.ShouldBeOfExactType<ArgumentException>();
     }
 }
