@@ -5,27 +5,26 @@
     /// <summary>
     /// Contains approximate string matching
     /// </summary>
-    static class Levenshtein
+    public static class Levenshtein
     {
         /// <summary>
         /// Compute the distance between two strings.
         /// </summary>
         public static double Distance(string source, string target)
         {
+            if (String.IsNullOrEmpty(source))
+            {
+                return String.IsNullOrEmpty(target) ? 0 : target.Length;
+            }
+
+            if (String.IsNullOrEmpty(target))
+            {
+                return source.Length;
+            }
+
             int n = source.Length;
             int m = target.Length;
             int[,] d = new int[n + 1, m + 1];
-
-            // Step 1
-            if (n == 0)
-            {
-                return m;
-            }
-
-            if (m == 0)
-            {
-                return n;
-            }
 
             // Step 2
             for (int i = 0; i <= n; d[i, 0] = i++)

@@ -6,12 +6,14 @@ namespace Algorithms.Trees
 
     public sealed class BurkhardKellerTree<T>
     {
+        private const double DistanceEpsilon = 1e-10;
+
         private readonly Func<T, T, double> distanceCalculator;
 
         /// <summary>
         ///   Initializes a new instance of the <see cref="BurkhardKellerTree{T}" /> class.
         /// </summary>
-        /// <param name="distanceCalculator"> The alogrithm to calculate the distance between two objects. </param>
+        /// <param name="distanceCalculator"> The algorithm to calculate the distance between two objects. </param>
         public BurkhardKellerTree(Func<T, T, double> distanceCalculator)
         {
             if (distanceCalculator == null)
@@ -26,14 +28,14 @@ namespace Algorithms.Trees
 
         public void AddItem(T item)
         {
-            if (EqualityComparer<T>.Default.Equals(item, default(T)))
+            if (item == null)
             {
                 throw new ArgumentNullException("item", "Item must have a value.");
             }
 
             if (RootNode == null)
             {
-                RootNode = new Node<T> {Data = item};
+                RootNode = new Node<T>(item);
             }
             else
             {
@@ -45,11 +47,11 @@ namespace Algorithms.Trees
         ///   Finds all items in the tree within a specified distance.
         /// </summary>
         /// <param name="value"> The search term to match against. </param>
-        /// <param name="distance"> The distance to a node that indicates a match. The range of values for difference varies depending on the difference alogrithm. This value should always be positive. </param>
+        /// <param name="distance"> The distance to a node that indicates a match. The range of values for difference varies depending on the difference algorithm. This value should always be positive. </param>
         /// <returns> The matching items in the tree. </returns>
         public IEnumerable<T> FindItemsWithinDistanceOf(T value, double distance)
         {
-            if (EqualityComparer<T>.Default.Equals(value, default(T)))
+            if (value == null)
             {
                 throw new ArgumentException("Value must have a value", "value");
             }
@@ -57,6 +59,11 @@ namespace Algorithms.Trees
             if (distance < 0)
             {
                 throw new ArgumentOutOfRangeException("distance", "Distance should be a positive number.");
+            }
+
+            if (RootNode == null)
+            {
+                return Enumerable.Empty<T>();
             }
 
             return FindMatchingItems(RootNode, value, distance);
@@ -87,20 +94,17 @@ namespace Algorithms.Trees
         {
             double distance = distanceCalculator(node.Data, item);
 
-            if (distance > 0)
+            Edge<T> edge = node.Edges.FirstOrDefault(e => Math.Abs(distance - e.Value) < DistanceEpsilon);
+
+            if (edge != null)
             {
-                Edge<T> edge = node.Edges.SingleOrDefault(e => distance.Equals(e.Value));
+                InsertNode(edge.EndNode, item);
+            }
+            else
+            {
+                var newEdge = new Edge<T>(new Node<T>(item), distance);
 
-                if (edge != null)
-                {
-                    InsertNode(edge.EndNode, item);
-                }
-                else
-                {
-                    var newEdge = new Edge<T> {EndNode = new Node<T> {Data = item}, StartNode = node, Value = distance};
-
-                    node.AddEdge(newEdge);
-                }
+                node.AddEdge(newEdge);
             }
         }
     }

@@ -93,7 +93,7 @@ namespace Algorithms.StringDistance
                 }
                 c++;
             }
-            return (s1.Length + s2.Length) / 2 - lcs;
+            return (s1.Length + s2.Length) / 2.0f - lcs;
         }
 
         /// <summary>
