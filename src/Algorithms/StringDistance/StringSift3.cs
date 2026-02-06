@@ -46,7 +46,7 @@ namespace Algorithms.StringDistance
         /// <param name="s1"></param>
         /// <param name="s2"></param>
         /// <returns></returns>
-        public float Distance(string s1, string s2)
+        public double Distance(string s1, string s2)
         {
             if (String.IsNullOrEmpty(s1))
                 return
@@ -93,7 +93,7 @@ namespace Algorithms.StringDistance
                 }
                 c++;
             }
-            return (s1.Length + s2.Length) / 2.0f - lcs;
+            return (s1.Length + s2.Length) / 2.0 - lcs;
         }
 
         /// <summary>
@@ -102,11 +102,11 @@ namespace Algorithms.StringDistance
         /// <param name="s1"></param>
         /// <param name="s2"></param>
         /// <returns></returns>
-        public float Similarity(string s1, string s2)
+        public double Similarity(string s1, string s2)
         {
-            float dis = this.Distance(s1, s2);
-            float maxLen = Math.Max(Math.Max(s1.Length, s2.Length), dis);
-            if (Math.Abs(maxLen - 0) < 0.0001) return 1;
+            double dis = this.Distance(s1, s2);
+            double maxLen = Math.Max(Math.Max(s1.Length, s2.Length), dis);
+            if (Math.Abs(maxLen) < 0.0001) return 1;
             return 1 - dis / maxLen;
         }
     }

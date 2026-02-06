@@ -8,7 +8,7 @@
     public class When_comparing_two_very_similar_words
     {
         private static StringSift3 sift;
-        private static float distance;
+        private static double distance;
 
         private Establish context = () => { sift = new StringSift3(); };
 

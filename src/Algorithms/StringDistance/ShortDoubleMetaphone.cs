@@ -110,10 +110,10 @@ namespace Algorithms.StringDistance
         public ShortDoubleMetaphone(String word)
             : base(word)
         {
-            this.m_primaryShortKey = metaphoneKeyToShort(this.PrimaryKey);
+            this.m_primaryShortKey = MetaphoneKeyToShort(this.PrimaryKey);
             if (this.AlternateKey != null)
             {
-                this.m_alternateShortKey = metaphoneKeyToShort(this.AlternateKey);
+                this.m_alternateShortKey = MetaphoneKeyToShort(this.AlternateKey);
             }
             else
             {
@@ -142,23 +142,23 @@ namespace Algorithms.StringDistance
 
         /// <summary>Sets a new current word, computing the string and ushort representations
         ///     of the metaphone keys of the given word.
-        /// 
+        ///
         ///     Note that this uses the new modifier, which hides the base class
-        ///     computeKeys.  The base class's computeKeys is then explicitly 
+        ///     ComputeKeys.  The base class's ComputeKeys is then explicitly
         ///     called as part of the function body.  It is important to note that
-        ///     this is NOT equivalent to overriding a virtual function, in that 
-        ///     polymorphism is not provided.  In this case, polymorphism is of no 
+        ///     this is NOT equivalent to overriding a virtual function, in that
+        ///     polymorphism is not provided.  In this case, polymorphism is of no
         ///     value, while the potential efficiency gained by not using virtual
         ///     methods is quite valuable.</summary>
         /// 
         /// <param name="word">New current word for which to compute metaphone keys</param>
-        public new void computeKeys(String word)
+        public new void ComputeKeys(String word)
         {
-            base.computeKeys(word);
+            base.ComputeKeys(word);
 
-            this.m_primaryShortKey = metaphoneKeyToShort(this.PrimaryKey);
+            this.m_primaryShortKey = MetaphoneKeyToShort(this.PrimaryKey);
             this.m_alternateShortKey = this.AlternateKey != null
-                                           ? metaphoneKeyToShort(this.AlternateKey)
+                                           ? MetaphoneKeyToShort(this.AlternateKey)
                                            : METAPHONE_INVALID_KEY;
         }
 
@@ -169,7 +169,7 @@ namespace Algorithms.StringDistance
         ///     tests are not performed, for performance reasons.</param>
         /// 
         /// <returns>ushort representation of the given metahphone key</returns>
-        private static ushort metaphoneKeyToShort(String metaphoneKey)
+        private static ushort MetaphoneKeyToShort(String metaphoneKey)
         {
             ushort result = 0;
 

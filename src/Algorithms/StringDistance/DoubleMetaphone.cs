@@ -80,7 +80,7 @@ namespace Algorithms.StringDistance
             this.m_primaryKey = new StringBuilder(METAPHONE_KEY_LENGTH + 2);
             this.m_alternateKey = new StringBuilder(METAPHONE_KEY_LENGTH + 2);
 
-            this.computeKeys("");
+            this.ComputeKeys("");
         }
 
         /// <summary>Constructs a new DoubleMetaphoneDistance object, and initializes it with
@@ -94,7 +94,7 @@ namespace Algorithms.StringDistance
             this.m_primaryKey = new StringBuilder(METAPHONE_KEY_LENGTH + 2);
             this.m_alternateKey = new StringBuilder(METAPHONE_KEY_LENGTH + 2);
 
-            this.computeKeys(word);
+            this.ComputeKeys(word);
         }
 
         /// <summary>The alternate metaphone key for the current word, or null if the current
@@ -132,7 +132,7 @@ namespace Algorithms.StringDistance
         /// <param name="primaryKey">Ref to var to receive primary metaphone key</param>
         /// <param name="alternateKey">Ref to var to receive alternate metaphone key, or be set to null if
         ///     word has no alternate key by double metaphone</param>
-        public static void doubleMetaphone(String word, out String primaryKey, out String alternateKey)
+        public static void GetDoubleMetaphoneKeys(String word, out String primaryKey, out String alternateKey)
         {
             var mp = new DoubleMetaphone(word);
 
@@ -145,7 +145,7 @@ namespace Algorithms.StringDistance
         /// 
         /// <param name="word">New word to set to current word.  Discards previous metaphone keys,
         ///     and computes new keys for this word</param>
-        public void computeKeys(String word)
+        public void ComputeKeys(String word)
         {
             this.m_primaryKey.Length = 0;
             this.m_alternateKey.Length = 0;
@@ -174,34 +174,10 @@ namespace Algorithms.StringDistance
             this.m_word = this.m_word.ToUpper();
 
             //Now build the keys
-            this.buildMetaphoneKeys();
+            this.BuildMetaphoneKeys();
         }
 
-        /**
-         * Internal impl of double metaphone algorithm.  Populates m_primaryKey and m_alternateKey.  Modified copy-past of
-         * Phillips' original code
-         */
-
-        /**
-         * Appends the given metaphone character to the primary and alternate keys
-         * 
-         * @param primaryCharacter
-         *               Character to append
-         */
-
-        /**
-         * Appends a metaphone character to the primary, and a possibly different alternate,
-         * metaphone keys for the word.
-         * 
-         * @param primaryCharacter
-         *               Primary character to append to primary key, and, if no alternate char is present,
-         *               the alternate key as well
-         * @param alternateCharacter
-         *               Alternate character to append to alternate key.  May be null or a zero-length string,
-         *               in which case the primary character will be appended to the alternate key instead
-         */
-
-        private void addMetaphoneCharacter(String primaryCharacter, String alternateCharacter = null)
+        private void AddMetaphoneCharacter(String primaryCharacter, String alternateCharacter = null)
         {
             //Is the primary character valid?
             if (primaryCharacter.Length > 0)
@@ -270,7 +246,7 @@ namespace Algorithms.StringDistance
          *         and length
          */
 
-        private bool areStringsAt(int start, int length, params String[] strings)
+        private bool AreStringsAt(int start, int length, params String[] strings)
         {
             if (start < 0)
             {
@@ -284,7 +260,7 @@ namespace Algorithms.StringDistance
             return strings.Any(t => t == target);
         }
 
-        private void buildMetaphoneKeys()
+        private void BuildMetaphoneKeys()
         {
             int current = 0;
             if (this.m_length < 1)
@@ -293,7 +269,7 @@ namespace Algorithms.StringDistance
             }
 
             //skip these when at start of word
-            if (this.areStringsAt(0, 2, "GN", "KN", "PN", "WR", "PS"))
+            if (this.AreStringsAt(0, 2, "GN", "KN", "PN", "WR", "PS"))
             {
                 current += 1;
             }
@@ -301,7 +277,7 @@ namespace Algorithms.StringDistance
             //Initial 'X' is pronounced 'Z' e.g. 'Xavier'
             if (this.m_word[0] == 'X')
             {
-                this.addMetaphoneCharacter("S"); //'Z' maps to 'S'
+                this.AddMetaphoneCharacter("S"); //'Z' maps to 'S'
                 current += 1;
             }
 
@@ -325,7 +301,7 @@ namespace Algorithms.StringDistance
                         if (current == 0)
                         {
                             //all init vowels now map to 'A'
-                            this.addMetaphoneCharacter("A");
+                            this.AddMetaphoneCharacter("A");
                         }
                         current += 1;
                         break;
@@ -333,7 +309,7 @@ namespace Algorithms.StringDistance
                     case 'B':
 
                         //"-mb", e.g", "dumb", already skipped over...
-                        this.addMetaphoneCharacter("P");
+                        this.AddMetaphoneCharacter("P");
 
                         if (this.m_word[current + 1] == 'B')
                         {
@@ -346,46 +322,46 @@ namespace Algorithms.StringDistance
                         break;
 
                     case 'Ç':
-                        this.addMetaphoneCharacter("S");
+                        this.AddMetaphoneCharacter("S");
                         current += 1;
                         break;
 
                     case 'C':
                         //various germanic
-                        if ((current > 1) && !this.isVowel(current - 2) && this.areStringsAt((current - 1), 3, "ACH")
+                        if ((current > 1) && !this.IsVowel(current - 2) && this.AreStringsAt((current - 1), 3, "ACH")
                             &&
                             ((this.m_word[current + 2] != 'I')
                              &&
                              ((this.m_word[current + 2] != 'E')
-                              || this.areStringsAt((current - 2), 6, "BACHER", "MACHER"))))
+                              || this.AreStringsAt((current - 2), 6, "BACHER", "MACHER"))))
                         {
-                            this.addMetaphoneCharacter("K");
+                            this.AddMetaphoneCharacter("K");
                             current += 2;
                             break;
                         }
 
                         //special case 'caesar'
-                        if ((current == 0) && this.areStringsAt(current, 6, "CAESAR"))
+                        if ((current == 0) && this.AreStringsAt(current, 6, "CAESAR"))
                         {
-                            this.addMetaphoneCharacter("S");
+                            this.AddMetaphoneCharacter("S");
                             current += 2;
                             break;
                         }
 
                         //italian 'chianti'
-                        if (this.areStringsAt(current, 4, "CHIA"))
+                        if (this.AreStringsAt(current, 4, "CHIA"))
                         {
-                            this.addMetaphoneCharacter("K");
+                            this.AddMetaphoneCharacter("K");
                             current += 2;
                             break;
                         }
 
-                        if (this.areStringsAt(current, 2, "CH"))
+                        if (this.AreStringsAt(current, 2, "CH"))
                         {
                             //find 'michael'
-                            if ((current > 0) && this.areStringsAt(current, 4, "CHAE"))
+                            if ((current > 0) && this.AreStringsAt(current, 4, "CHAE"))
                             {
-                                this.addMetaphoneCharacter("K", "X");
+                                this.AddMetaphoneCharacter("K", "X");
                                 current += 2;
                                 break;
                             }
@@ -393,126 +369,126 @@ namespace Algorithms.StringDistance
                             //greek roots e.g. 'chemistry', 'chorus'
                             if ((current == 0)
                                 &&
-                                (this.areStringsAt((current + 1), 5, "HARAC", "HARIS")
-                                 || this.areStringsAt((current + 1), 3, "HOR", "HYM", "HIA", "HEM"))
-                                && !this.areStringsAt(0, 5, "CHORE"))
+                                (this.AreStringsAt((current + 1), 5, "HARAC", "HARIS")
+                                 || this.AreStringsAt((current + 1), 3, "HOR", "HYM", "HIA", "HEM"))
+                                && !this.AreStringsAt(0, 5, "CHORE"))
                             {
-                                this.addMetaphoneCharacter("K");
+                                this.AddMetaphoneCharacter("K");
                                 current += 2;
                                 break;
                             }
 
                             //germanic, greek, or otherwise 'ch' for 'kh' sound
-                            if ((this.areStringsAt(0, 4, "VAN ", "VON ") || this.areStringsAt(0, 3, "SCH"))
+                            if ((this.AreStringsAt(0, 4, "VAN ", "VON ") || this.AreStringsAt(0, 3, "SCH"))
                                 // 'architect but not 'arch', 'orchestra', 'orchid'
-                                || this.areStringsAt((current - 2), 6, "ORCHES", "ARCHIT", "ORCHID")
-                                || this.areStringsAt((current + 2), 1, "T", "S")
+                                || this.AreStringsAt((current - 2), 6, "ORCHES", "ARCHIT", "ORCHID")
+                                || this.AreStringsAt((current + 2), 1, "T", "S")
                                 ||
-                                ((this.areStringsAt((current - 1), 1, "A", "O", "U", "E") || (current == 0))
+                                ((this.AreStringsAt((current - 1), 1, "A", "O", "U", "E") || (current == 0))
                                  //e.g., 'wachtler', 'wechsler', but not 'tichner'
                                  &&
-                                 this.areStringsAt((current + 2), 1, "L", "R", "N", "M", "B", "H", "F", "V", "W", " ")))
+                                 this.AreStringsAt((current + 2), 1, "L", "R", "N", "M", "B", "H", "F", "V", "W", " ")))
                             {
-                                this.addMetaphoneCharacter("K");
+                                this.AddMetaphoneCharacter("K");
                             }
                             else
                             {
                                 if (current > 0)
                                 {
-                                    if (this.areStringsAt(0, 2, "MC"))
+                                    if (this.AreStringsAt(0, 2, "MC"))
                                     {
                                         //e.g., "McHugh"
-                                        this.addMetaphoneCharacter("K");
+                                        this.AddMetaphoneCharacter("K");
                                     }
                                     else
                                     {
-                                        this.addMetaphoneCharacter("X", "K");
+                                        this.AddMetaphoneCharacter("X", "K");
                                     }
                                 }
                                 else
                                 {
-                                    this.addMetaphoneCharacter("X");
+                                    this.AddMetaphoneCharacter("X");
                                 }
                             }
                             current += 2;
                             break;
                         }
                         //e.g, 'czerny'
-                        if (this.areStringsAt(current, 2, "CZ") && !this.areStringsAt((current - 2), 4, "WICZ"))
+                        if (this.AreStringsAt(current, 2, "CZ") && !this.AreStringsAt((current - 2), 4, "WICZ"))
                         {
-                            this.addMetaphoneCharacter("S", "X");
+                            this.AddMetaphoneCharacter("S", "X");
                             current += 2;
                             break;
                         }
 
                         //e.g., 'focaccia'
-                        if (this.areStringsAt((current + 1), 3, "CIA"))
+                        if (this.AreStringsAt((current + 1), 3, "CIA"))
                         {
-                            this.addMetaphoneCharacter("X");
+                            this.AddMetaphoneCharacter("X");
                             current += 3;
                             break;
                         }
 
                         //double 'C', but not if e.g. 'McClellan'
-                        if (this.areStringsAt(current, 2, "CC") && !((current == 1) && (this.m_word[0] == 'M')))
+                        if (this.AreStringsAt(current, 2, "CC") && !((current == 1) && (this.m_word[0] == 'M')))
                         {
                             //'bellocchio' but not 'bacchus'
-                            if (this.areStringsAt((current + 2), 1, "I", "E", "H")
-                                && !this.areStringsAt((current + 2), 2, "HU"))
+                            if (this.AreStringsAt((current + 2), 1, "I", "E", "H")
+                                && !this.AreStringsAt((current + 2), 2, "HU"))
                             {
                                 //'accident', 'accede' 'succeed'
                                 if (((current == 1) && (this.m_word[current - 1] == 'A'))
-                                    || this.areStringsAt((current - 1), 5, "UCCEE", "UCCES"))
+                                    || this.AreStringsAt((current - 1), 5, "UCCEE", "UCCES"))
                                 {
-                                    this.addMetaphoneCharacter("KS");
+                                    this.AddMetaphoneCharacter("KS");
                                 }
                                     //'bacci', 'bertucci', other italian
                                 else
                                 {
-                                    this.addMetaphoneCharacter("X");
+                                    this.AddMetaphoneCharacter("X");
                                 }
                                 current += 3;
                                 break;
                             }
 
                             //Pierce's rule
-                            this.addMetaphoneCharacter("K");
+                            this.AddMetaphoneCharacter("K");
                             current += 2;
                             break;
                         }
 
-                        if (this.areStringsAt(current, 2, "CK", "CG", "CQ"))
+                        if (this.AreStringsAt(current, 2, "CK", "CG", "CQ"))
                         {
-                            this.addMetaphoneCharacter("K");
+                            this.AddMetaphoneCharacter("K");
                             current += 2;
                             break;
                         }
 
-                        if (this.areStringsAt(current, 2, "CI", "CE", "CY"))
+                        if (this.AreStringsAt(current, 2, "CI", "CE", "CY"))
                         {
                             //italian vs. english
-                            if (this.areStringsAt(current, 3, "CIO", "CIE", "CIA"))
+                            if (this.AreStringsAt(current, 3, "CIO", "CIE", "CIA"))
                             {
-                                this.addMetaphoneCharacter("S", "X");
+                                this.AddMetaphoneCharacter("S", "X");
                             }
                             else
                             {
-                                this.addMetaphoneCharacter("S");
+                                this.AddMetaphoneCharacter("S");
                             }
                             current += 2;
                             break;
                         }
 
                         //else
-                        this.addMetaphoneCharacter("K");
+                        this.AddMetaphoneCharacter("K");
 
                         //name sent in 'mac caffrey', 'mac gregor
-                        if (this.areStringsAt((current + 1), 2, " C", " Q", " G"))
+                        if (this.AreStringsAt((current + 1), 2, " C", " Q", " G"))
                         {
                             current += 3;
                         }
-                        else if (this.areStringsAt((current + 1), 1, "C", "K", "Q")
-                                 && !this.areStringsAt((current + 1), 2, "CE", "CI"))
+                        else if (this.AreStringsAt((current + 1), 1, "C", "K", "Q")
+                                 && !this.AreStringsAt((current + 1), 2, "CE", "CI"))
                         {
                             current += 2;
                         }
@@ -523,31 +499,31 @@ namespace Algorithms.StringDistance
                         break;
 
                     case 'D':
-                        if (this.areStringsAt(current, 2, "DG"))
+                        if (this.AreStringsAt(current, 2, "DG"))
                         {
-                            if (this.areStringsAt((current + 2), 1, "I", "E", "Y"))
+                            if (this.AreStringsAt((current + 2), 1, "I", "E", "Y"))
                             {
                                 //e.g. 'edge'
-                                this.addMetaphoneCharacter("J");
+                                this.AddMetaphoneCharacter("J");
                                 current += 3;
                                 break;
                             }
 
                             //e.g. 'edgar'
-                            this.addMetaphoneCharacter("TK");
+                            this.AddMetaphoneCharacter("TK");
                             current += 2;
                             break;
                         }
 
-                        if (this.areStringsAt(current, 2, "DT", "DD"))
+                        if (this.AreStringsAt(current, 2, "DT", "DD"))
                         {
-                            this.addMetaphoneCharacter("T");
+                            this.AddMetaphoneCharacter("T");
                             current += 2;
                             break;
                         }
 
                         //else
-                        this.addMetaphoneCharacter("T");
+                        this.AddMetaphoneCharacter("T");
                         current += 1;
                         break;
 
@@ -560,15 +536,15 @@ namespace Algorithms.StringDistance
                         {
                             current += 1;
                         }
-                        this.addMetaphoneCharacter("F");
+                        this.AddMetaphoneCharacter("F");
                         break;
 
                     case 'G':
                         if (this.m_word[current + 1] == 'H')
                         {
-                            if ((current > 0) && !this.isVowel(current - 1))
+                            if ((current > 0) && !this.IsVowel(current - 1))
                             {
-                                this.addMetaphoneCharacter("K");
+                                this.AddMetaphoneCharacter("K");
                                 current += 2;
                                 break;
                             }
@@ -578,16 +554,16 @@ namespace Algorithms.StringDistance
                                 //'ghislane', ghiradelli
                                 if (current == 0)
                                 {
-                                    this.addMetaphoneCharacter(this.m_word[current + 2] == 'I' ? "J" : "K");
+                                    this.AddMetaphoneCharacter(this.m_word[current + 2] == 'I' ? "J" : "K");
                                     current += 2;
                                     break;
                                 }
                             }
                             //Parker's rule (with some further refinements) - e.g., 'hugh'
-                            if (((current > 1) && this.areStringsAt((current - 2), 1, "B", "H", "D")) //e.g., 'bough'
-                                || ((current > 2) && this.areStringsAt((current - 3), 1, "B", "H", "D"))
+                            if (((current > 1) && this.AreStringsAt((current - 2), 1, "B", "H", "D")) //e.g., 'bough'
+                                || ((current > 2) && this.AreStringsAt((current - 3), 1, "B", "H", "D"))
                                 //e.g., 'broughton'
-                                || ((current > 3) && this.areStringsAt((current - 4), 1, "B", "H")))
+                                || ((current > 3) && this.AreStringsAt((current - 4), 1, "B", "H")))
                             {
                                 current += 2;
                                 break;
@@ -595,13 +571,13 @@ namespace Algorithms.StringDistance
 
                             //e.g., 'laugh', 'McLaughlin', 'cough', 'gough', 'rough', 'tough'
                             if ((current > 2) && (this.m_word[current - 1] == 'U')
-                                && this.areStringsAt((current - 3), 1, "C", "G", "L", "R", "T"))
+                                && this.AreStringsAt((current - 3), 1, "C", "G", "L", "R", "T"))
                             {
-                                this.addMetaphoneCharacter("F");
+                                this.AddMetaphoneCharacter("F");
                             }
                             else if ((current > 0) && this.m_word[current - 1] != 'I')
                             {
-                                this.addMetaphoneCharacter("K");
+                                this.AddMetaphoneCharacter("K");
                             }
 
                             current += 2;
@@ -610,29 +586,29 @@ namespace Algorithms.StringDistance
 
                         if (this.m_word[current + 1] == 'N')
                         {
-                            if ((current == 1) && this.isVowel(0) && !this.isWordSlavoGermanic())
+                            if ((current == 1) && this.IsVowel(0) && !this.IsWordSlavoGermanic())
                             {
-                                this.addMetaphoneCharacter("KN", "N");
+                                this.AddMetaphoneCharacter("KN", "N");
                             }
                             else
                                 //not e.g. 'cagney'
-                                if (!this.areStringsAt((current + 2), 2, "EY") && (this.m_word[current + 1] != 'Y')
-                                    && !this.isWordSlavoGermanic())
+                                if (!this.AreStringsAt((current + 2), 2, "EY") && (this.m_word[current + 1] != 'Y')
+                                    && !this.IsWordSlavoGermanic())
                                 {
-                                    this.addMetaphoneCharacter("N", "KN");
+                                    this.AddMetaphoneCharacter("N", "KN");
                                 }
                                 else
                                 {
-                                    this.addMetaphoneCharacter("KN");
+                                    this.AddMetaphoneCharacter("KN");
                                 }
                             current += 2;
                             break;
                         }
 
                         //'tagliaro'
-                        if (this.areStringsAt((current + 1), 2, "LI") && !this.isWordSlavoGermanic())
+                        if (this.AreStringsAt((current + 1), 2, "LI") && !this.IsWordSlavoGermanic())
                         {
-                            this.addMetaphoneCharacter("KL", "L");
+                            this.AddMetaphoneCharacter("KL", "L");
                             current += 2;
                             break;
                         }
@@ -642,44 +618,44 @@ namespace Algorithms.StringDistance
                             &&
                             ((this.m_word[current + 1] == 'Y')
                              ||
-                             this.areStringsAt(
+                             this.AreStringsAt(
                                  (current + 1), 2, "ES", "EP", "EB", "EL", "EY", "IB", "IL", "IN", "IE", "EI", "ER")))
                         {
-                            this.addMetaphoneCharacter("K", "J");
+                            this.AddMetaphoneCharacter("K", "J");
                             current += 2;
                             break;
                         }
 
                         // -ger-,  -gy-
-                        if ((this.areStringsAt((current + 1), 2, "ER") || (this.m_word[current + 1] == 'Y'))
-                            && !this.areStringsAt(0, 6, "DANGER", "RANGER", "MANGER")
-                            && !this.areStringsAt((current - 1), 1, "E", "I")
-                            && !this.areStringsAt((current - 1), 3, "RGY", "OGY"))
+                        if ((this.AreStringsAt((current + 1), 2, "ER") || (this.m_word[current + 1] == 'Y'))
+                            && !this.AreStringsAt(0, 6, "DANGER", "RANGER", "MANGER")
+                            && !this.AreStringsAt((current - 1), 1, "E", "I")
+                            && !this.AreStringsAt((current - 1), 3, "RGY", "OGY"))
                         {
-                            this.addMetaphoneCharacter("K", "J");
+                            this.AddMetaphoneCharacter("K", "J");
                             current += 2;
                             break;
                         }
 
                         // italian e.g, 'biaggi'
-                        if (this.areStringsAt((current + 1), 1, "E", "I", "Y")
-                            || this.areStringsAt((current - 1), 4, "AGGI", "OGGI"))
+                        if (this.AreStringsAt((current + 1), 1, "E", "I", "Y")
+                            || this.AreStringsAt((current - 1), 4, "AGGI", "OGGI"))
                         {
                             //obvious germanic
-                            if ((this.areStringsAt(0, 4, "VAN ", "VON ") || this.areStringsAt(0, 3, "SCH"))
-                                || this.areStringsAt((current + 1), 2, "ET"))
+                            if ((this.AreStringsAt(0, 4, "VAN ", "VON ") || this.AreStringsAt(0, 3, "SCH"))
+                                || this.AreStringsAt((current + 1), 2, "ET"))
                             {
-                                this.addMetaphoneCharacter("K");
+                                this.AddMetaphoneCharacter("K");
                             }
                             else
                                 //always soft if french ending
-                                if (this.areStringsAt((current + 1), 4, "IER "))
+                                if (this.AreStringsAt((current + 1), 4, "IER "))
                                 {
-                                    this.addMetaphoneCharacter("J");
+                                    this.AddMetaphoneCharacter("J");
                                 }
                                 else
                                 {
-                                    this.addMetaphoneCharacter("J", "K");
+                                    this.AddMetaphoneCharacter("J", "K");
                                 }
                             current += 2;
                             break;
@@ -693,14 +669,14 @@ namespace Algorithms.StringDistance
                         {
                             current += 1;
                         }
-                        this.addMetaphoneCharacter("K");
+                        this.AddMetaphoneCharacter("K");
                         break;
 
                     case 'H':
                         //only keep if first & before vowel or btw. 2 vowels
-                        if (((current == 0) || this.isVowel(current - 1)) && this.isVowel(current + 1))
+                        if (((current == 0) || this.IsVowel(current - 1)) && this.IsVowel(current + 1))
                         {
-                            this.addMetaphoneCharacter("H");
+                            this.AddMetaphoneCharacter("H");
                             current += 2;
                         }
                         else //also takes care of 'HH'
@@ -711,39 +687,39 @@ namespace Algorithms.StringDistance
 
                     case 'J':
                         //obvious spanish, 'jose', 'san jacinto'
-                        if (this.areStringsAt(current, 4, "JOSE") || this.areStringsAt(0, 4, "SAN "))
+                        if (this.AreStringsAt(current, 4, "JOSE") || this.AreStringsAt(0, 4, "SAN "))
                         {
-                            if (((current == 0) && (this.m_word[current + 4] == ' ')) || this.areStringsAt(0, 4, "SAN "))
+                            if (((current == 0) && (this.m_word[current + 4] == ' ')) || this.AreStringsAt(0, 4, "SAN "))
                             {
-                                this.addMetaphoneCharacter("H");
+                                this.AddMetaphoneCharacter("H");
                             }
                             else
                             {
-                                this.addMetaphoneCharacter("J", "H");
+                                this.AddMetaphoneCharacter("J", "H");
                             }
                             current += 1;
                             break;
                         }
 
-                        if ((current == 0) && !this.areStringsAt(current, 4, "JOSE"))
+                        if ((current == 0) && !this.AreStringsAt(current, 4, "JOSE"))
                         {
-                            this.addMetaphoneCharacter("J", "A"); //Yankelovich/Jankelowicz
+                            this.AddMetaphoneCharacter("J", "A"); //Yankelovich/Jankelowicz
                         }
                         else
                             //spanish pron. of e.g. 'bajador'
-                            if (this.isVowel(current - 1) && !this.isWordSlavoGermanic()
+                            if (this.IsVowel(current - 1) && !this.IsWordSlavoGermanic()
                                 && ((this.m_word[current + 1] == 'A') || (this.m_word[current + 1] == 'O')))
                             {
-                                this.addMetaphoneCharacter("J", "H");
+                                this.AddMetaphoneCharacter("J", "H");
                             }
                             else if (current == this.m_last)
                             {
-                                this.addMetaphoneCharacter("J", " ");
+                                this.AddMetaphoneCharacter("J", " ");
                             }
-                            else if (!this.areStringsAt((current + 1), 1, "L", "T", "K", "S", "N", "M", "B", "Z")
-                                     && !this.areStringsAt((current - 1), 1, "S", "K", "L"))
+                            else if (!this.AreStringsAt((current + 1), 1, "L", "T", "K", "S", "N", "M", "B", "Z")
+                                     && !this.AreStringsAt((current - 1), 1, "S", "K", "L"))
                             {
-                                this.addMetaphoneCharacter("J");
+                                this.AddMetaphoneCharacter("J");
                             }
 
                         if (this.m_word[current + 1] == 'J') //it could happen!
@@ -765,7 +741,7 @@ namespace Algorithms.StringDistance
                         {
                             current += 1;
                         }
-                        this.addMetaphoneCharacter("K");
+                        this.AddMetaphoneCharacter("K");
                         break;
 
                     case 'L':
@@ -773,13 +749,13 @@ namespace Algorithms.StringDistance
                         {
                             //spanish e.g. 'cabrillo', 'gallegos'
                             if (((current == (this.m_length - 3))
-                                 && this.areStringsAt((current - 1), 4, "ILLO", "ILLA", "ALLE"))
+                                 && this.AreStringsAt((current - 1), 4, "ILLO", "ILLA", "ALLE"))
                                 ||
-                                ((this.areStringsAt((this.m_last - 1), 2, "AS", "OS")
-                                  || this.areStringsAt(this.m_last, 1, "A", "O"))
-                                 && this.areStringsAt((current - 1), 4, "ALLE")))
+                                ((this.AreStringsAt((this.m_last - 1), 2, "AS", "OS")
+                                  || this.AreStringsAt(this.m_last, 1, "A", "O"))
+                                 && this.AreStringsAt((current - 1), 4, "ALLE")))
                             {
-                                this.addMetaphoneCharacter("L", " ");
+                                this.AddMetaphoneCharacter("L", " ");
                                 current += 2;
                                 break;
                             }
@@ -789,12 +765,12 @@ namespace Algorithms.StringDistance
                         {
                             current += 1;
                         }
-                        this.addMetaphoneCharacter("L");
+                        this.AddMetaphoneCharacter("L");
                         break;
 
                     case 'M':
-                        if ((this.areStringsAt((current - 1), 3, "UMB")
-                             && (((current + 1) == this.m_last) || this.areStringsAt((current + 2), 2, "ER")))
+                        if ((this.AreStringsAt((current - 1), 3, "UMB")
+                             && (((current + 1) == this.m_last) || this.AreStringsAt((current + 2), 2, "ER")))
                             //'dumb','thumb'
                             || (this.m_word[current + 1] == 'M'))
                         {
@@ -804,7 +780,7 @@ namespace Algorithms.StringDistance
                         {
                             current += 1;
                         }
-                        this.addMetaphoneCharacter("M");
+                        this.AddMetaphoneCharacter("M");
                         break;
 
                     case 'N':
@@ -816,24 +792,24 @@ namespace Algorithms.StringDistance
                         {
                             current += 1;
                         }
-                        this.addMetaphoneCharacter("N");
+                        this.AddMetaphoneCharacter("N");
                         break;
 
                     case 'Ñ':
                         current += 1;
-                        this.addMetaphoneCharacter("N");
+                        this.AddMetaphoneCharacter("N");
                         break;
 
                     case 'P':
                         if (this.m_word[current + 1] == 'H')
                         {
-                            this.addMetaphoneCharacter("F");
+                            this.AddMetaphoneCharacter("F");
                             current += 2;
                             break;
                         }
 
                         //also account for "campbell", "raspberry"
-                        if (this.areStringsAt((current + 1), 1, "P", "B"))
+                        if (this.AreStringsAt((current + 1), 1, "P", "B"))
                         {
                             current += 2;
                         }
@@ -841,7 +817,7 @@ namespace Algorithms.StringDistance
                         {
                             current += 1;
                         }
-                        this.addMetaphoneCharacter("P");
+                        this.AddMetaphoneCharacter("P");
                         break;
 
                     case 'Q':
@@ -853,20 +829,20 @@ namespace Algorithms.StringDistance
                         {
                             current += 1;
                         }
-                        this.addMetaphoneCharacter("K");
+                        this.AddMetaphoneCharacter("K");
                         break;
 
                     case 'R':
                         //french e.g. 'rogier', but exclude 'hochmeier'
-                        if ((current == this.m_last) && !this.isWordSlavoGermanic()
-                            && this.areStringsAt((current - 2), 2, "IE")
-                            && !this.areStringsAt((current - 4), 2, "ME", "MA"))
+                        if ((current == this.m_last) && !this.IsWordSlavoGermanic()
+                            && this.AreStringsAt((current - 2), 2, "IE")
+                            && !this.AreStringsAt((current - 4), 2, "ME", "MA"))
                         {
-                            this.addMetaphoneCharacter("", "R");
+                            this.AddMetaphoneCharacter("", "R");
                         }
                         else
                         {
-                            this.addMetaphoneCharacter("R");
+                            this.AddMetaphoneCharacter("R");
                         }
 
                         if (this.m_word[current + 1] == 'R')
@@ -881,39 +857,39 @@ namespace Algorithms.StringDistance
 
                     case 'S':
                         //special cases 'island', 'isle', 'carlisle', 'carlysle'
-                        if (this.areStringsAt((current - 1), 3, "ISL", "YSL"))
+                        if (this.AreStringsAt((current - 1), 3, "ISL", "YSL"))
                         {
                             current += 1;
                             break;
                         }
 
                         //special case 'sugar-'
-                        if ((current == 0) && this.areStringsAt(current, 5, "SUGAR"))
+                        if ((current == 0) && this.AreStringsAt(current, 5, "SUGAR"))
                         {
-                            this.addMetaphoneCharacter("X", "S");
+                            this.AddMetaphoneCharacter("X", "S");
                             current += 1;
                             break;
                         }
 
-                        if (this.areStringsAt(current, 2, "SH"))
+                        if (this.AreStringsAt(current, 2, "SH"))
                         {
                             //germanic
-                            this.addMetaphoneCharacter(
-                                this.areStringsAt((current + 1), 4, "HEIM", "HOEK", "HOLM", "HOLZ") ? "S" : "X");
+                            this.AddMetaphoneCharacter(
+                                this.AreStringsAt((current + 1), 4, "HEIM", "HOEK", "HOLM", "HOLZ") ? "S" : "X");
                             current += 2;
                             break;
                         }
 
                         //italian & armenian
-                        if (this.areStringsAt(current, 3, "SIO", "SIA") || this.areStringsAt(current, 4, "SIAN"))
+                        if (this.AreStringsAt(current, 3, "SIO", "SIA") || this.AreStringsAt(current, 4, "SIAN"))
                         {
-                            if (!this.isWordSlavoGermanic())
+                            if (!this.IsWordSlavoGermanic())
                             {
-                                this.addMetaphoneCharacter("S", "X");
+                                this.AddMetaphoneCharacter("S", "X");
                             }
                             else
                             {
-                                this.addMetaphoneCharacter("S");
+                                this.AddMetaphoneCharacter("S");
                             }
                             current += 3;
                             break;
@@ -921,11 +897,11 @@ namespace Algorithms.StringDistance
 
                         //german & anglicisations, e.g. 'smith' match 'schmidt', 'snider' match 'schneider'
                         //also, -sz- in slavic language altho in hungarian it is pronounced 's'
-                        if (((current == 0) && this.areStringsAt((current + 1), 1, "M", "N", "L", "W"))
-                            || this.areStringsAt((current + 1), 1, "Z"))
+                        if (((current == 0) && this.AreStringsAt((current + 1), 1, "M", "N", "L", "W"))
+                            || this.AreStringsAt((current + 1), 1, "Z"))
                         {
-                            this.addMetaphoneCharacter("S", "X");
-                            if (this.areStringsAt((current + 1), 1, "Z"))
+                            this.AddMetaphoneCharacter("S", "X");
+                            if (this.AreStringsAt((current + 1), 1, "Z"))
                             {
                                 current += 2;
                             }
@@ -936,62 +912,62 @@ namespace Algorithms.StringDistance
                             break;
                         }
 
-                        if (this.areStringsAt(current, 2, "SC"))
+                        if (this.AreStringsAt(current, 2, "SC"))
                         {
                             //Schlesinger's rule
                             if (this.m_word[current + 2] == 'H')
                             {
                                 //dutch origin, e.g. 'school', 'schooner'
-                                if (this.areStringsAt((current + 3), 2, "OO", "ER", "EN", "UY", "ED", "EM"))
+                                if (this.AreStringsAt((current + 3), 2, "OO", "ER", "EN", "UY", "ED", "EM"))
                                 {
                                     //'schermerhorn', 'schenker'
-                                    if (this.areStringsAt((current + 3), 2, "ER", "EN"))
+                                    if (this.AreStringsAt((current + 3), 2, "ER", "EN"))
                                     {
-                                        this.addMetaphoneCharacter("X", "SK");
+                                        this.AddMetaphoneCharacter("X", "SK");
                                     }
                                     else
                                     {
-                                        this.addMetaphoneCharacter("SK");
+                                        this.AddMetaphoneCharacter("SK");
                                     }
                                     current += 3;
                                     break;
                                 }
 
-                                if ((current == 0) && !this.isVowel(3) && (this.m_word[3] != 'W'))
+                                if ((current == 0) && !this.IsVowel(3) && (this.m_word[3] != 'W'))
                                 {
-                                    this.addMetaphoneCharacter("X", "S");
+                                    this.AddMetaphoneCharacter("X", "S");
                                 }
                                 else
                                 {
-                                    this.addMetaphoneCharacter("X");
+                                    this.AddMetaphoneCharacter("X");
                                 }
                                 current += 3;
                                 break;
                             }
 
-                            if (this.areStringsAt((current + 2), 1, "I", "E", "Y"))
+                            if (this.AreStringsAt((current + 2), 1, "I", "E", "Y"))
                             {
-                                this.addMetaphoneCharacter("S");
+                                this.AddMetaphoneCharacter("S");
                                 current += 3;
                                 break;
                             }
                             //else
-                            this.addMetaphoneCharacter("SK");
+                            this.AddMetaphoneCharacter("SK");
                             current += 3;
                             break;
                         }
 
                         //french e.g. 'resnais', 'artois'
-                        if ((current == this.m_last) && this.areStringsAt((current - 2), 2, "AI", "OI"))
+                        if ((current == this.m_last) && this.AreStringsAt((current - 2), 2, "AI", "OI"))
                         {
-                            this.addMetaphoneCharacter("", "S");
+                            this.AddMetaphoneCharacter("", "S");
                         }
                         else
                         {
-                            this.addMetaphoneCharacter("S");
+                            this.AddMetaphoneCharacter("S");
                         }
 
-                        if (this.areStringsAt((current + 1), 1, "S", "Z"))
+                        if (this.AreStringsAt((current + 1), 1, "S", "Z"))
                         {
                             current += 2;
                         }
@@ -1002,37 +978,37 @@ namespace Algorithms.StringDistance
                         break;
 
                     case 'T':
-                        if (this.areStringsAt(current, 4, "TION"))
+                        if (this.AreStringsAt(current, 4, "TION"))
                         {
-                            this.addMetaphoneCharacter("X");
+                            this.AddMetaphoneCharacter("X");
                             current += 3;
                             break;
                         }
 
-                        if (this.areStringsAt(current, 3, "TIA", "TCH"))
+                        if (this.AreStringsAt(current, 3, "TIA", "TCH"))
                         {
-                            this.addMetaphoneCharacter("X");
+                            this.AddMetaphoneCharacter("X");
                             current += 3;
                             break;
                         }
 
-                        if (this.areStringsAt(current, 2, "TH") || this.areStringsAt(current, 3, "TTH"))
+                        if (this.AreStringsAt(current, 2, "TH") || this.AreStringsAt(current, 3, "TTH"))
                         {
                             //special case 'thomas', 'thames' or germanic
-                            if (this.areStringsAt((current + 2), 2, "OM", "AM")
-                                || this.areStringsAt(0, 4, "VAN ", "VON ") || this.areStringsAt(0, 3, "SCH"))
+                            if (this.AreStringsAt((current + 2), 2, "OM", "AM")
+                                || this.AreStringsAt(0, 4, "VAN ", "VON ") || this.AreStringsAt(0, 3, "SCH"))
                             {
-                                this.addMetaphoneCharacter("T");
+                                this.AddMetaphoneCharacter("T");
                             }
                             else
                             {
-                                this.addMetaphoneCharacter("0", "T");
+                                this.AddMetaphoneCharacter("0", "T");
                             }
                             current += 2;
                             break;
                         }
 
-                        if (this.areStringsAt((current + 1), 1, "T", "D"))
+                        if (this.AreStringsAt((current + 1), 1, "T", "D"))
                         {
                             current += 2;
                         }
@@ -1040,7 +1016,7 @@ namespace Algorithms.StringDistance
                         {
                             current += 1;
                         }
-                        this.addMetaphoneCharacter("T");
+                        this.AddMetaphoneCharacter("T");
                         break;
 
                     case 'V':
@@ -1052,46 +1028,46 @@ namespace Algorithms.StringDistance
                         {
                             current += 1;
                         }
-                        this.addMetaphoneCharacter("F");
+                        this.AddMetaphoneCharacter("F");
                         break;
 
                     case 'W':
                         //can also be in middle of word
-                        if (this.areStringsAt(current, 2, "WR"))
+                        if (this.AreStringsAt(current, 2, "WR"))
                         {
-                            this.addMetaphoneCharacter("R");
+                            this.AddMetaphoneCharacter("R");
                             current += 2;
                             break;
                         }
 
-                        if ((current == 0) && (this.isVowel(current + 1) || this.areStringsAt(current, 2, "WH")))
+                        if ((current == 0) && (this.IsVowel(current + 1) || this.AreStringsAt(current, 2, "WH")))
                         {
                             //Wasserman should match Vasserman
-                            if (this.isVowel(current + 1))
+                            if (this.IsVowel(current + 1))
                             {
-                                this.addMetaphoneCharacter("A", "F");
+                                this.AddMetaphoneCharacter("A", "F");
                             }
                             else
                             {
                                 //need Uomo to match Womo
-                                this.addMetaphoneCharacter("A");
+                                this.AddMetaphoneCharacter("A");
                             }
                         }
 
                         //Arnow should match Arnoff
-                        if (((current == this.m_last) && this.isVowel(current - 1))
-                            || this.areStringsAt((current - 1), 5, "EWSKI", "EWSKY", "OWSKI", "OWSKY")
-                            || this.areStringsAt(0, 3, "SCH"))
+                        if (((current == this.m_last) && this.IsVowel(current - 1))
+                            || this.AreStringsAt((current - 1), 5, "EWSKI", "EWSKY", "OWSKI", "OWSKY")
+                            || this.AreStringsAt(0, 3, "SCH"))
                         {
-                            this.addMetaphoneCharacter("", "F");
+                            this.AddMetaphoneCharacter("", "F");
                             current += 1;
                             break;
                         }
 
                         //polish e.g. 'filipowicz'
-                        if (this.areStringsAt(current, 4, "WICZ", "WITZ"))
+                        if (this.AreStringsAt(current, 4, "WICZ", "WITZ"))
                         {
-                            this.addMetaphoneCharacter("TS", "FX");
+                            this.AddMetaphoneCharacter("TS", "FX");
                             current += 4;
                             break;
                         }
@@ -1105,13 +1081,13 @@ namespace Algorithms.StringDistance
                         if (
                             !((current == this.m_last)
                               &&
-                              (this.areStringsAt((current - 3), 3, "IAU", "EAU")
-                               || this.areStringsAt((current - 2), 2, "AU", "OU"))))
+                              (this.AreStringsAt((current - 3), 3, "IAU", "EAU")
+                               || this.AreStringsAt((current - 2), 2, "AU", "OU"))))
                         {
-                            this.addMetaphoneCharacter("KS");
+                            this.AddMetaphoneCharacter("KS");
                         }
 
-                        if (this.areStringsAt((current + 1), 1, "C", "X"))
+                        if (this.AreStringsAt((current + 1), 1, "C", "X"))
                         {
                             current += 2;
                         }
@@ -1125,19 +1101,19 @@ namespace Algorithms.StringDistance
                         //chinese pinyin e.g. 'zhao'
                         if (this.m_word[current + 1] == 'H')
                         {
-                            this.addMetaphoneCharacter("J");
+                            this.AddMetaphoneCharacter("J");
                             current += 2;
                             break;
                         }
 
-                        if (this.areStringsAt((current + 1), 2, "ZO", "ZI", "ZA")
-                            || (this.isWordSlavoGermanic() && ((current > 0) && this.m_word[current - 1] != 'T')))
+                        if (this.AreStringsAt((current + 1), 2, "ZO", "ZI", "ZA")
+                            || (this.IsWordSlavoGermanic() && ((current > 0) && this.m_word[current - 1] != 'T')))
                         {
-                            this.addMetaphoneCharacter("S", "TS");
+                            this.AddMetaphoneCharacter("S", "TS");
                         }
                         else
                         {
-                            this.addMetaphoneCharacter("S");
+                            this.AddMetaphoneCharacter("S");
                         }
 
                         if (this.m_word[current + 1] == 'Z')
@@ -1171,7 +1147,7 @@ namespace Algorithms.StringDistance
             this.m_alternateKeyString = this.m_alternateKey.ToString();
         }
 
-        private bool isVowel(int pos)
+        private bool IsVowel(int pos)
         {
             if ((pos < 0) || (pos >= this.m_length))
             {
@@ -1188,7 +1164,7 @@ namespace Algorithms.StringDistance
             return false;
         }
 
-        private bool isWordSlavoGermanic()
+        private bool IsWordSlavoGermanic()
         {
             return (this.m_word.IndexOf("W", StringComparison.Ordinal) != -1)
                    || (this.m_word.IndexOf("K", StringComparison.Ordinal) != -1)
