@@ -81,8 +81,13 @@ namespace Algorithms.Trees
                 yield return node.Data;
             }
 
-            foreach (Edge<T> edge in node.Edges.Where(e => e.Value >= minimum && e.Value <= maximum))
+            foreach (Edge<T> edge in node.Edges)
             {
+                if (edge.Value < minimum || edge.Value > maximum)
+                {
+                    continue;
+                }
+
                 foreach (T item in FindMatchingItems(edge.EndNode, value, distance))
                 {
                     yield return item;

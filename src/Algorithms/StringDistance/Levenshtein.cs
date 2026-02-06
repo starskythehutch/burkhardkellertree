@@ -10,7 +10,7 @@
         /// <summary>
         /// Compute the distance between two strings.
         /// </summary>
-        public static double Distance(string source, string target)
+        public static double Distance(this string source, string target)
         {
             if (String.IsNullOrEmpty(source))
             {
