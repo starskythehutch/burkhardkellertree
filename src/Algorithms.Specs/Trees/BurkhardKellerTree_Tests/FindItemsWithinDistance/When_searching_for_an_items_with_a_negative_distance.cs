@@ -21,6 +21,6 @@ namespace Algorithms.Specs.Trees.BurkhardKellerTree_Tests.FindItemsWithinDistanc
             () => { Exception = Catch.Exception(() => { tree.FindItemsWithinDistanceOf("Lorem", -0.01f); }); };
 
         private It should_fail_with_an_ArgumentOutOfRangeException =
-            () => Exception.ShouldBeOfType<ArgumentOutOfRangeException>();
+            () => Exception.ShouldBeOfExactType<ArgumentOutOfRangeException>();
     }
 }

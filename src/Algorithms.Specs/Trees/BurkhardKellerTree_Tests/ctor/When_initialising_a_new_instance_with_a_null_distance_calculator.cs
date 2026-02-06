@@ -16,6 +16,6 @@
         private Because of =
             () => { Exception = Catch.Exception(() => { new BurkhardKellerTree<string>(null); }); };
 
-        private It should_fail_with_an_argument_null_exception = () => Exception.ShouldBeOfType<ArgumentNullException>();
+        private It should_fail_with_an_argument_null_exception = () => Exception.ShouldBeOfExactType<ArgumentNullException>();
     }
 }
