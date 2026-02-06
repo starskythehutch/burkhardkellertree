@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Algorithms</RootNamespace>
     <AssemblyName>Algorithms</AssemblyName>
-    <PackageId>BurkhardKellerTree</PackageId>
+    <PackageId>BKTree.Net</PackageId>
     <Description>Burkhard-Keller tree implementation with string distance algorithms including Levenshtein, Damerau-Levenshtein, Double Metaphone, and StringSift3.</Description>
     <PackageTags>bk-tree;burkhard-keller;levenshtein;string-distance;fuzzy-search</PackageTags>
     <IsPackable>true</IsPackable>
